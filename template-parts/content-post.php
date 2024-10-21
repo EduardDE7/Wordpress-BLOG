@@ -1,4 +1,4 @@
-<article class="post">
+<article class="post <?php echo is_single() ? 'post--full' : ''; ?>">
   <div class="post__image-wrapper">
     <?php
     if (has_post_thumbnail()) {
@@ -27,7 +27,7 @@
         <?php the_title(); ?>
       </a>
     </h2>
-    <footer class="post-info__footer">
+    <div class="post-info__footer">
       <a href="/author/jason-francisco" class="post-info__author">
         <div class="post-info__author-image-wrapper">
           <?php echo get_avatar(get_the_author_meta('user_email'), 34); ?>
@@ -36,6 +36,14 @@
         <span class="post-info__author-name"><?php the_author(); ?></span>
       </a>
       <time class="post-info__date" datetime="2022-08-20"><?php the_time('j F'); ?></time>
-    </footer>
+    </div>
   </div>
+  <?php if (is_single()) : ?>
+    <div class="post__content box">
+      <?php
+      the_tags('<div class="post__tags">', ', ', '</div>');
+      the_content();
+      ?>
+    </div>
+  <?php endif; ?>
 </article>

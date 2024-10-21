@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <?php get_sidebar(); ?>
-<main class="main">
+<main class="main" id="main">
   <div class="container-grid">
 <header class="header">
   <?php get_template_part('template-parts/topbar', args: ['title' => 'Home']); ?>
