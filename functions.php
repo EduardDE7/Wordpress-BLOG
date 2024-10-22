@@ -190,7 +190,7 @@ function filter_favorites_search($query)
 }
 
 
-
+// CUSTOM USER AVATAR
 
 add_action('show_user_profile', 'add_custom_user_avatar_field');
 add_action('edit_user_profile', 'add_custom_user_avatar_field');
@@ -198,10 +198,10 @@ add_action('edit_user_profile', 'add_custom_user_avatar_field');
 function add_custom_user_avatar_field($user)
 {
 ?>
-  <h3>Пользовательский аватар</h3>
+  <h3>Change Avatar</h3>
   <table class="form-table">
     <tr>
-      <th><label for="custom_avatar">Загрузить аватар</label></th>
+      <th><label for="custom_avatar">Upload Avatar</label></th>
       <td>
         <?php
         $avatar_id = get_user_meta($user->ID, 'custom_avatar', true);

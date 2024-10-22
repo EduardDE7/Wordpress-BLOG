@@ -55,21 +55,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   //#endregion EXPAND CATEGORIES
-  const tabs = document.querySelectorAll('.authorize__tab');
-  const tabContents = document.querySelectorAll('.authorize__pane');
 
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', function (e) {
-      e.preventDefault();
-      const tabId = this.getAttribute('data-tab');
+  //#region EDIT PROFILE
+  const profileEditButton = document.querySelector('.profile__edit-button');
 
-      // Remove active class from all tabs and tab contents
-      tabs.forEach((t) => t.classList.remove('authorize__tab--active'));
-      tabContents.forEach((c) => c.classList.remove('authorize__pane--active'));
+  if (profileEditButton) {
+    const profileAvatarUpload = document.querySelector(
+      '.profile__avatar-upload'
+    );
+    const profileInput = document.querySelectorAll('.profile__input');
+    const profileSubmitButton = document.querySelector(
+      '.profile__submit-button'
+    );
 
-      // Add active class to current tab and its content
-      this.classList.add('authorize__tab--active');
-      document.getElementById(tabId).classList.add('authorize__pane--active');
+    let isEditing = false;
+    function toggleEditMode() {
+      isEditing = !isEditing;
+
+      profileInput.forEach((input) => {
+        input.disabled = !isEditing;
+      });
+
+      if (isEditing) {
+        profileAvatarUpload.classList.remove('profile__avatar-upload--hidden');
+        profileSubmitButton.classList.remove('profile__submit-button--hidden');
+        profileEditButton.classList.add('profile__edit-button--red');
+        profileEditButton.textContent = 'Cancel';
+      } else {
+        profileAvatarUpload.classList.add('profile__avatar-upload--hidden');
+        profileSubmitButton.classList.add('profile__submit-button--hidden');
+        profileEditButton.classList.remove('profile__edit-button--red');
+      }
+    }
+
+    profileEditButton.addEventListener('click', toggleEditMode);
+
+    const avatarInput = document.getElementById('avatar-upload');
+    const avatarPreview = document.querySelector('.profile__avatar img');
+
+    avatarInput.addEventListener('change', function (e) {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatarPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
     });
-  });
+  }
+  //#endregion EDIT PROFILE
 });
