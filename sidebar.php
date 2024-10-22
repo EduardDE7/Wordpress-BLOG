@@ -24,22 +24,6 @@
       </a>
     </li>
     <li class="sidebar__nav-item">
-      <a href="#" class="sidebar__nav-link" aria-label="Navigation item 2">
-        <svg
-          width="18"
-          height="20"
-          viewBox="0 0 18 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M16.0214 10.3484L16.0214 10.3484L17.1292 12.0712C17.9684 13.3777 17.3129 15.1289 15.894 15.5298L15.8937 15.5299C11.3865 16.8063 6.61339 16.8063 2.10618 15.5299L2.10589 15.5298C0.686956 15.1289 0.0314914 13.3777 0.870634 12.0712L1.97849 10.3484L1.97919 10.3473C2.48383 9.55812 2.75165 8.64077 2.75094 7.704C2.75094 7.70396 2.75094 7.70391 2.75094 7.70387C2.75094 7.70377 2.75094 7.70367 2.75094 7.70358L2.75094 7C2.75094 3.39279 5.56612 0.5 8.99994 0.5C12.4339 0.5 15.2499 3.39289 15.2499 7V7.704C15.2499 8.64329 15.5167 9.56342 16.0214 10.3484ZM9.00171 19.5L8.99817 19.5C8.37241 19.5022 7.75433 19.3622 7.19062 19.0905C7.07263 19.0337 6.95767 18.9714 6.84608 18.9039C8.2798 19.0157 9.72008 19.0157 11.1538 18.9039C11.0422 18.9714 10.9272 19.0337 10.8093 19.0905C10.2455 19.3622 9.62747 19.5022 9.00171 19.5Z"
-            stroke=currentColor />
-        </svg>
-
-        <span class="sidebar__text">Notifications</span>
-      </a>
-    </li>
-    <li class="sidebar__nav-item">
       <a href="<?php echo get_permalink(get_page_by_path('favorites')); ?>" class="sidebar__nav-link <?php echo is_page('favorites') ? 'sidebar__nav-link--active' : ''; ?>" aria-label="Favorites">
         <svg
           width="16"
@@ -60,7 +44,7 @@
       </a>
     </li>
     <li class="sidebar__nav-item">
-      <a href="#" class="sidebar__nav-link" aria-label="Navigation item 4">
+      <a href="<?php echo get_permalink(get_page_by_path('categories')); ?>" class="sidebar__nav-link <?php echo is_page('categories') ? 'sidebar__nav-link--active' : ''; ?>" aria-label="Categories">
         <svg
           width="18"
           height="20"
@@ -72,7 +56,7 @@
             stroke=currentColor />
         </svg>
 
-        <span class="sidebar__text">List</span>
+        <span class="sidebar__text">Categories</span>
       </a>
     </li>
   </ul>
@@ -92,11 +76,6 @@
         <path d="M1 9.5L4.5 9.5L6 9.5M6 9.5L5 11M6 9.5L5 8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     <?php } ?>
-    <!-- <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/3dc53772cee943a43a10884836e5073da01f81f6926751d4a5e1a64819c317e7?placeholderIfAbsent=true&apiKey=509209c882354b6bbdcc2cde282a5ebb"
-          alt="User profile"
-          class="sidebar__profile-image"
-        /> -->
     <span class="sidebar__text"><?php echo (is_user_logged_in()) ? 'Profile' : 'Login' ?></span>
   </a>
 </nav>

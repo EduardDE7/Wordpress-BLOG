@@ -104,4 +104,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   //#endregion EDIT PROFILE
+
+  //#region CATEGORIES SLIDER
+  document.querySelectorAll('.categories__toggle').forEach((button) => {
+    const categorySection = button.closest('.categories__section');
+    const categorySlug = categorySection.dataset.category;
+
+    const isCollapsed =
+      localStorage.getItem(`category_${categorySlug}_collapsed`) === 'true';
+    if (isCollapsed) {
+      categorySection.classList.add('categories__section--collapsed');
+    }
+
+    button.addEventListener('click', () => {
+      categorySection.classList.toggle('categories__section--collapsed');
+
+      const isNowCollapsed = categorySection.classList.contains(
+        'categories__section--collapsed'
+      );
+      localStorage.setItem(
+        `category_${categorySlug}_collapsed`,
+        isNowCollapsed
+      );
+    });
+  });
+
+  document.querySelectorAll('.slider').forEach((slider) => {
+    const container = slider.querySelector('.slider__container');
+    const prevBtn = slider.querySelector('.slider__button--prev');
+    const nextBtn = slider.querySelector('.slider__button--next');
+
+    function updateArrowsVisibility() {
+      const isStart = container.scrollLeft === 0;
+      const isEnd =
+        container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - 1;
+
+      if (isStart) {
+        prevBtn.classList.add('slider__button--hidden');
+      } else {
+        prevBtn.classList.remove('slider__button--hidden');
+      }
+
+      if (isEnd) {
+        nextBtn.classList.add('slider__button--hidden');
+      } else {
+        nextBtn.classList.remove('slider__button--hidden');
+      }
+    }
+
+    prevBtn.addEventListener('click', () => {
+      container.scrollBy({ left: -1, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      container.scrollBy({ left: 1, behavior: 'smooth' });
+    });
+
+    container.addEventListener('scroll', updateArrowsVisibility);
+    updateArrowsVisibility();
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateArrowsVisibility, 100);
+    });
+  });
+  //#endregion CATEGORIES SLIDER
 });
