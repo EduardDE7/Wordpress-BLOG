@@ -16,7 +16,7 @@ get_sidebar();
 <main class="authorize">
 
   <form id="login" class="authorize__form" name="form" action="<?php echo home_url(); ?>/login/" method="post">
-    
+
     <div class="authorize__form-top">
       <h2 class="authorize__title">
         Welcome! Please Log In
@@ -24,7 +24,7 @@ get_sidebar();
       <p class="authorize__error-message">
         <?php if (!empty($errors)) {
           echo $errors;
-        }?>
+        } ?>
       </p>
     </div>
 
@@ -36,6 +36,14 @@ get_sidebar();
     <div class="authorize__form-group">
       <label hidden for="password">Password</label>
       <input required id="password" type="password" placeholder="Enter your password" name="password">
+    </div>
+
+    <div class="authorize__form-group">
+      <label class="checkbox-label" for="rememberme">
+        Remember Me
+        <input type="checkbox" id="rememberme" name="rememberme" value="forever">
+        <span class="checkmark"></span>
+      </label>
     </div>
 
     <button class="authorize__form-button main-button" type="submit" name="submit">Sign In</button>

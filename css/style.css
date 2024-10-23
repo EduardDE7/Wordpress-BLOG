@@ -652,7 +652,6 @@ html:not(.touch-device) .sidebar__profile:hover svg {
 }
 
 .topbar__title {
-  height: 34px;
   font-size: var(--fs-lg);
   line-height: 1;
   color: var(--third-text-clr);
@@ -661,14 +660,27 @@ html:not(.touch-device) .sidebar__profile:hover svg {
   background-color: var(--secondary-bg-clr);
   border-radius: var(--radius);
   padding-inline: 10px;
+  padding-block: 8px;
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
   background-color: var(--secondary-bg-clr);
   max-width: 15ch;
-  white-space: nowrap;
+}
+
+.topbar__title span {
+  /* white-space: nowrap;
+  text-overflow: ellipsis; */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
   overflow: hidden;
-  text-overflow: ellipsis;
+  height: var(--fs-lg);
+}
+
+.single .topbar__title {
+  max-width: 30ch;
 }
 
 .topbar__theme-toggle {
@@ -686,6 +698,42 @@ html:not(.touch-device) .sidebar__profile:hover svg {
 
 html:not(.touch-device) .topbar__theme-toggle:hover {
   filter: brightness(0.9);
+}
+
+.sun-and-moon {
+  transition: rotate 0.5s ease;
+}
+
+.sun-and-moon > :is(.moon, .sun, .sun-beams) {
+  transform-origin: center center;
+}
+
+.sun-and-moon > .sun {
+  transition: 0.5s ease;
+}
+
+.sun-and-moon > .sun-beams {
+  transition: 0.5s ease;
+}
+
+.sun-and-moon > .moon > circle {
+  transition: 0.5s ease;
+}
+
+.dark-theme .sun-and-moon {
+  rotate: 180deg;
+}
+
+.dark-theme .sun-and-moon > .sun {
+  transform: scale(1.75);
+}
+
+.dark-theme .sun-and-moon > .sun-beams {
+  opacity: 0;
+}
+
+.dark-theme .sun-and-moon > .moon > circle {
+  transform: translateX(-7px);
 }
 
 .topbar__search-wrapper {
@@ -734,6 +782,7 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   justify-content: space-between;
   align-items: center;
   padding: var(--space-md) var(--space-md);
+  cursor: pointer;
 }
 
 .categories__title {

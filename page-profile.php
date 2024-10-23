@@ -15,14 +15,12 @@ if (isset($_POST['update_profile'])) {
   if (!wp_verify_nonce($_POST['profile_nonce'], 'update_profile_nonce')) {
     $messages[] = array('type' => 'error', 'text' => 'Security check failed');
   } else {
-    // Валидация данных
     if (empty($_POST['user_email'])) {
       $messages[] = array('type' => 'error', 'text' => 'Email is required');
     } elseif (!is_email($_POST['user_email'])) {
       $messages[] = array('type' => 'error', 'text' => 'Please enter a valid email address');
     }
 
-    // Если нет сообщений об ошибках, обрабатываем данные
     if (empty($messages)) {
       $user_id = $current_user->ID;
       $email = sanitize_email($_POST['user_email']);
@@ -38,7 +36,6 @@ if (isset($_POST['update_profile'])) {
         $display_name = $last_name;
       }
 
-      // Handle avatar upload
       if (isset($_FILES['custom_avatar']) && $_FILES['custom_avatar']['size'] > 0) {
         if ($_FILES['custom_avatar']['size'] > 2 * 1024 * 1024) {
           $messages[] = array('type' => 'error', 'text' => 'Image size should not exceed 2MB');
@@ -58,11 +55,9 @@ if (isset($_POST['update_profile'])) {
         }
       }
 
-      // Обновляем данные пользователя только если нет ошибок с загрузкой аватара
       if (!array_filter($messages, function ($msg) {
         return $msg['type'] === 'error';
       })) {
-        // Update user data
         wp_update_user(array(
           'ID' => $user_id,
           'display_name' => $display_name,
