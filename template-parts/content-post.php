@@ -28,14 +28,13 @@
       </a>
     </h2>
     <div class="post-info__footer">
-      <a href="/author/jason-francisco" class="post-info__author">
+      <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" class="post-info__author">
         <div class="post-info__author-image-wrapper">
           <?php echo get_avatar(get_the_author_meta('user_email'), 34); ?>
-
         </div>
         <span class="post-info__author-name"><?php the_author(); ?></span>
       </a>
-      <time class="post-info__date" datetime="2022-08-20"><?php the_time('j F'); ?></time>
+      <time class="post-info__date" datetime="<?php echo get_the_date('Y-m-d'); ?>"><?php the_time('j F'); ?></time>
     </div>
   </div>
   <?php if (is_single()) : ?>

@@ -579,6 +579,7 @@ html:not(.touch-device) .sidebar__profile:hover svg {
   overflow: hidden;
   color: var(--main-text-clr);
   font-size: 14px;
+  line-height: 1.4;
   font-weight: 400;
   opacity: 0;
   transition: max-width var(--transition-time) ease,
@@ -679,6 +680,7 @@ html:not(.touch-device) .sidebar__profile:hover svg {
   height: var(--fs-lg);
 }
 
+.author .topbar__title,
 .single .topbar__title {
   max-width: 30ch;
 }
