@@ -32,11 +32,9 @@ $categories = get_categories(array(
               <?php echo $category->name; ?>
               <span class="categories__count">(<?php echo $category->count; ?>)</span>
             </h2>
-            <button class="categories__toggle" aria-label="Toggle category">
-              <svg class="categories__toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
+            <svg class="categories__arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </div>
 
           <div class="slider">

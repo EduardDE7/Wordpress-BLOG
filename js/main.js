@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.documentElement.classList.add('touch-device');
+  }
+
   //#region TOGGLE THEME
   const themeToggle = document.querySelector('.topbar__theme-toggle');
 
@@ -106,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //#endregion EDIT PROFILE
 
   //#region CATEGORIES SLIDER
-  document.querySelectorAll('.categories__toggle').forEach((button) => {
-    const categorySection = button.closest('.categories__section');
+  document.querySelectorAll('.categories__header').forEach((header) => {
+    const categorySection = header.closest('.categories__section');
     const categorySlug = categorySection.dataset.category;
 
     const isCollapsed =
@@ -116,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       categorySection.classList.add('categories__section--collapsed');
     }
 
-    button.addEventListener('click', () => {
+    header.addEventListener('click', () => {
       categorySection.classList.toggle('categories__section--collapsed');
 
       const isNowCollapsed = categorySection.classList.contains(

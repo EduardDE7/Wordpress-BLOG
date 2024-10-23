@@ -20,7 +20,7 @@
           ?>
         </span>
       </div>
-      <?php the_favorites_button(); ?>
+      <?php the_favorite_button(); ?>
     </header>
     <h2 class="post-info__title">
       <a href="<?php echo get_the_permalink(); ?>">

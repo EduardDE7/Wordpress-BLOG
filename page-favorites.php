@@ -5,46 +5,47 @@ Template Name: Favorites Page
 
 get_header();
 ?>
+
 <?php get_sidebar(); ?>
-<?php if (!is_user_logged_in()) : ?>
-  <main class="main container-center">
+
+<main class="main <?php echo !is_user_logged_in() ? 'container-center' : ''; ?>">
+  <?php if (!is_user_logged_in()) : ?>
     <div class="box favorites__box">
-      <p>You must be logged in to view your favorites.</p>
-      <a href="<?php echo get_permalink(get_page_by_path('login')); ?>" class="main-link">Login</a>
+      <h2 class="box__title">Favorites</h2>
+      <p>To view favorite posts, please log in to the system.</p>
+      <a href="<?php echo esc_url(get_permalink(get_page_by_path('login'))); ?>" class="main-link">Log In</a>
       <p class="text-secondary">
         Don't have an account?
         <br>
-        It's free, and only takes a minute to
-        <a href="<?php echo get_permalink(get_page_by_path('register')); ?>" class="main-link">register</a>!
+        Registering will only take a minute -
+        <a href="<?php echo esc_url(get_permalink(get_page_by_path('register'))); ?>" class="main-link">Register</a>!
       </p>
     </div>
-
-
   <?php else : ?>
-    <main class="main">
-      <div class="container-grid">
-        <header class="header">
-          <?php get_template_part('template-parts/topbar', args: ['title' => 'Favorites']); ?>
-          <?php get_template_part('template-parts/categories', 'list'); ?>
-        </header>
+    <div class="container-grid">
+      <header class="header">
+        <?php get_template_part('template-parts/topbar', null, array('title' => 'Favorites')); ?>
+        <?php get_template_part('template-parts/categories', 'list'); ?>
+      </header>
 
-        <?php
-        $favorites = get_user_favorites();
+      <?php
+      $favorites = get_user_favorites();
 
-        if ($favorites) :
-          foreach ($favorites as $post_id) :
-            $post = get_post($post_id);
-            setup_postdata($post);
-            get_template_part('template-parts/content', 'post');
-          endforeach;
-          wp_reset_postdata();
-        else :
-          echo '<p>You have no favorite posts yet.</p>';
-        endif;
-        ?>
+      if (!empty($favorites)) :
+        foreach ($favorites as $post) :
+          setup_postdata($post);
+          get_template_part('template-parts/content', 'post');
+        endforeach;
+        wp_reset_postdata();
+      else :
+      ?>
+        <div class="box favorites__empty">
+          <p>You have no favorite posts yet.</p>
+          <a href="<?php echo esc_url(home_url('/')); ?>" class="main-link">Go to the list of posts</a>
+        </div>
       <?php endif; ?>
+    </div>
+  <?php endif; ?>
+</main>
 
-      </div>
-    </main>
-
-    <?php get_footer(); ?>
+<?php get_footer(); ?>
