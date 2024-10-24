@@ -25,6 +25,27 @@ function register_reaction_assets()
 }
 add_action('wp_enqueue_scripts', 'register_reaction_assets');
 
+function add_likes_fields()
+{
+  add_meta_box(
+    'likes_meta_box',
+    'Likes/Dislikes Statistics',
+    'display_likes_meta_box',
+    'post',
+    'side',
+    'high'
+  );
+}
+add_action('add_meta_boxes', 'add_likes_fields');
+
+function display_likes_meta_box($post)
+{
+  $likes = get_post_meta($post->ID, '_likes_count', true) ?: 0;
+  $dislikes = get_post_meta($post->ID, '_dislikes_count', true) ?: 0;
+  echo '<p>Likes: ' . $likes . '</p>';
+  echo '<p>Dislikes: ' . $dislikes . '</p>';
+}
+
 function add_reaction_buttons($content)
 {
   if (!is_single()) {
@@ -74,13 +95,13 @@ function handle_post_reaction()
   }
 
   if ($previous_type && $previous_type !== 'none') {
-    $prev_meta_key = "_${previous_type}s_count";
+    $prev_meta_key = "_{$previous_type}s_count";
     $prev_count = max(0, intval(get_post_meta($post_id, $prev_meta_key, true)) - 1);
     update_post_meta($post_id, $prev_meta_key, $prev_count);
   }
 
   if ($type !== 'none') {
-    $meta_key = "_${type}s_count";
+    $meta_key = "_{$type}s_count";
     $current_count = intval(get_post_meta($post_id, $meta_key, true)) + 1;
     update_post_meta($post_id, $meta_key, $current_count);
   }

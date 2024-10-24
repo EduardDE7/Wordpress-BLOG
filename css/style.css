@@ -1341,6 +1341,86 @@ html:not(.touch-device) .topbar__social a:hover svg {
 
 /*#endregion WP */
 
+/*#region CUSTOM SELECT */
+.custom-select-wrapper {
+  position: relative;
+  user-select: none;
+  width: 200px;
+  align-self: flex-end;
+}
+
+.custom-select {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: var(--third-text-clr);
+}
+
+.custom-select__trigger {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: none;
+  justify-content: space-between;
+  padding-block: 0;
+  font-size: var(--fs-md);
+  height: 34px;
+  line-height: 34px;
+  cursor: pointer;
+}
+
+.custom-select .custom-options {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  top: calc(100% + var(--space-sm));
+  left: 0;
+  right: 0;
+  transition: opacity var(--transition-time) ease,
+    visibility var(--transition-time) ease;
+  height: auto;
+  padding-block: var(--space-sm);
+  opacity: 0;
+  font-weight: 300;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.custom-select.open .custom-options {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.custom-option {
+  cursor: pointer;
+  font-size: var(--fs-md);
+  cursor: pointer;
+  transition: color var(--transition-time) ease;
+}
+
+.custom-option.selected {
+  color: var(--main-text-clr);
+}
+
+.custom-option:hover {
+  color: var(--primary-accent-clr);
+}
+
+.custom-select__arrow {
+  height: 20px;
+  width: 20px;
+  transition: transform var(--transition-time) ease;
+  transform: rotate(-90deg);
+}
+.open .custom-select__arrow {
+  transform: rotate(-270deg);
+}
+/*#endregion CUSTOM SELECT */
 /*#region MEDIA QUERIES */
 
 @media (max-width: 1100px) {

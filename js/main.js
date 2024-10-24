@@ -175,4 +175,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   //#endregion CATEGORIES SLIDER
+
+  //#region CUSTOM SELECT
+  document
+    .querySelector('.custom-select-wrapper')
+    .addEventListener('click', function () {
+      const customSelect = document.querySelector('.custom-select');
+      customSelect.classList.toggle('open');
+    });
+
+  for (const option of document.querySelectorAll('.custom-option')) {
+    option.addEventListener('click', function () {
+      if (!option.classList.contains('selected')) {
+        const selectedOption = option.parentNode.querySelector(
+          '.custom-option.selected'
+        );
+        if (selectedOption) {
+          selectedOption.classList.remove('selected');
+        }
+        option.classList.add('selected');
+
+        const triggerSpan = option
+          .closest('.custom-select')
+          .querySelector('.custom-select__trigger span');
+        triggerSpan.textContent = option.textContent;
+
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('sort', option.getAttribute('data-value'));
+        window.location.href = currentUrl.toString();
+      }
+    });
+  }
+
+  window.addEventListener('click', function (e) {
+    const select = document.querySelector('.custom-select');
+    if (!select.contains(e.target)) {
+      select.classList.remove('open');
+    }
+  });
+
+  // #endregion CUSTOM SELECT
 });
