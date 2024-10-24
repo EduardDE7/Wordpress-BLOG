@@ -1264,6 +1264,69 @@ html:not(.touch-device) .topbar__social a:hover svg {
   fill: currentColor;
 }
 
+.post-reactions {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.like-button,
+.dislike-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  transition: all var(--transition-time) ease;
+}
+
+.thumbs-up-icon,
+.thumbs-down-icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--third-text-clr);
+  transition: all var(--transition-time) ease;
+}
+
+.likes-count,
+.dislikes-count {
+  margin-left: var(--space-sm);
+  font-size: var(--fs-sm);
+  color: var(--secondary-text-clr);
+}
+
+.like-button:hover .thumbs-up-icon,
+.like-button.active .thumbs-up-icon {
+  /* fill: #ff6b6b; */
+  fill: var(--secondary-accent-clr);
+  transform: scale(1.1);
+}
+
+.dislike-button:hover .thumbs-down-icon,
+.dislike-button.active .thumbs-down-icon {
+  fill: #4a4e69;
+  transform: scale(1.1);
+}
+
+.like-button.pulse,
+.dislike-button.pulse {
+  animation: pulse var(--transition-time) ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 /*#endregion POST */
 
 /*#region WP */

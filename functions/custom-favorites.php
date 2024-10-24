@@ -1,4 +1,17 @@
 <?php
+function add_favorites_scripts()
+{
+  if (is_user_logged_in()) {
+    wp_enqueue_script('favorites-script', get_template_directory_uri() . '/js/favorites.js', array(), filemtime(get_template_directory() . '/js/favorites.js'), true);
+    wp_localize_script('favorites-script', 'favoritesAjax', array(
+      'ajaxurl' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('favorites_nonce'),
+    ));
+  }
+}
+
+add_action('wp_enqueue_scripts', 'add_favorites_scripts');
+
 function get_user_favorites()
 {
   if (!is_user_logged_in()) {
@@ -161,16 +174,3 @@ function the_favorite_button($post_id = null, $classes = '')
 
   echo $html;
 }
-
-function add_favorites_scripts()
-{
-  if (is_user_logged_in()) {
-    wp_enqueue_script('favorites-script', get_template_directory_uri() . '/js/favorites.js', array(), filemtime(get_template_directory() . '/js/favorites.js'), true);
-    wp_localize_script('favorites-script', 'favoritesAjax', array(
-      'ajaxurl' => admin_url('admin-ajax.php'),
-      'nonce' => wp_create_nonce('favorites_nonce'),
-    ));
-  }
-}
-
-add_action('wp_enqueue_scripts', 'add_favorites_scripts');
