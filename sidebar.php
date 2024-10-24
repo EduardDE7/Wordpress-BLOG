@@ -1,7 +1,7 @@
 <nav class="sidebar">
   <a href="<?php echo home_url(); ?>" class="sidebar__logo">
-    <span class="sidebar__logo-icon">B</span>
-    <span class="sidebar__text">Blogger</span>
+    <span class="sidebar__logo-icon">DM</span>
+    <span class="sidebar__text"><?php echo get_bloginfo('name'); ?></span>
   </a>
   <ul class="sidebar__nav-menu">
     <li class="sidebar__nav-item">

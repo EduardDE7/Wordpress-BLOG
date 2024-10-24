@@ -5,8 +5,11 @@
     $current_category = get_queried_object();
     $is_home = is_home() || is_front_page();
 
+    $current_sort = isset($_GET['sort']) ? sanitize_text_field($_GET['sort']) : 'date-desc';
+
+
     $all_link_class = 'categories-filter__link' . ($is_home ? ' categories-filter__link--active' : '');
-    $all_link_url = get_post_type_archive_link('post');
+    $all_link_url = add_query_arg('sort', $current_sort, get_post_type_archive_link('post'));
     ?>
 
     <a href="<?php echo esc_url($all_link_url); ?>" class="<?php echo esc_attr($all_link_class); ?>">
@@ -16,8 +19,8 @@
     <?php
     foreach ($categories as $category) :
       $is_current = is_category() && $current_category->term_id == $category->term_id;
+      $category_link_url = add_query_arg('sort', $current_sort, get_category_link($category->term_id));
       $category_link_class = 'categories-filter__link' . ($is_current ? ' categories-filter__link--active' : '');
-      $category_link_url = get_category_link($category->term_id);
     ?>
       <a href="<?php echo esc_url($category_link_url); ?>" class="<?php echo esc_attr($category_link_class); ?>">
         <?php echo esc_html($category->name); ?>

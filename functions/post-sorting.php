@@ -1,7 +1,7 @@
 <?php
 function modify_posts_query($query)
 {
-  if (!is_admin() && $query->is_main_query() && is_home()) {
+  if (!is_admin() && $query->is_main_query() && (is_home() || is_category())) {
     $sort = isset($_GET['sort']) ? sanitize_text_field($_GET['sort']) : 'date-desc';
 
     switch ($sort) {

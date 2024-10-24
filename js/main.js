@@ -30,36 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //#endregion TOGGLE THEME
 
-  //#region EXPAND CATEGORIES
-
-  // const categoriesToggle = document.getElementById('categories-toggle');
-  // const categoriesList = document.getElementById('categories-list');
-  // const hiddenCategories = document.querySelectorAll(
-  //   '.categories__link--hidden'
-  // );
-
-  // function hideCategories() {
-  //   categoriesList.classList.remove('categories__list--full');
-  //   categoriesToggle.classList.remove('categories__toggle--rotate');
-  //   hiddenCategories.forEach((category) => {
-  //     category.classList.add('categories__link--hidden');
-  //   });
-  // }
-
-  // if (categoriesToggle) {
-  //   categoriesToggle.addEventListener('click', function (event) {
-  //     event.stopPropagation();
-  //     categoriesList.classList.toggle('categories__list--full');
-  //     categoriesToggle.classList.toggle('categories__toggle--rotate');
-  //     hiddenCategories.forEach((category) => {
-  //       category.classList.toggle('categories__link--hidden');
-  //     });
-  //   });
-  //   document.addEventListener('click', hideCategories);
-  // }
-
-  //#endregion EXPAND CATEGORIES
-
   //#region EDIT PROFILE
   const profileEditButton = document.querySelector('.profile__edit-button');
 
