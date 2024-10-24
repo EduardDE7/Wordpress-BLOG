@@ -32,31 +32,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //#region EXPAND CATEGORIES
 
-  const categoriesToggle = document.getElementById('categories-toggle');
-  const categoriesList = document.getElementById('categories-list');
-  const hiddenCategories = document.querySelectorAll(
-    '.categories__link--hidden'
-  );
+  // const categoriesToggle = document.getElementById('categories-toggle');
+  // const categoriesList = document.getElementById('categories-list');
+  // const hiddenCategories = document.querySelectorAll(
+  //   '.categories__link--hidden'
+  // );
 
-  function hideCategories() {
-    categoriesList.classList.remove('categories__list--full');
-    categoriesToggle.classList.remove('categories__toggle--rotate');
-    hiddenCategories.forEach((category) => {
-      category.classList.add('categories__link--hidden');
-    });
-  }
+  // function hideCategories() {
+  //   categoriesList.classList.remove('categories__list--full');
+  //   categoriesToggle.classList.remove('categories__toggle--rotate');
+  //   hiddenCategories.forEach((category) => {
+  //     category.classList.add('categories__link--hidden');
+  //   });
+  // }
 
-  if (categoriesToggle) {
-    categoriesToggle.addEventListener('click', function (event) {
-      event.stopPropagation();
-      categoriesList.classList.toggle('categories__list--full');
-      categoriesToggle.classList.toggle('categories__toggle--rotate');
-      hiddenCategories.forEach((category) => {
-        category.classList.toggle('categories__link--hidden');
-      });
-    });
-    document.addEventListener('click', hideCategories);
-  }
+  // if (categoriesToggle) {
+  //   categoriesToggle.addEventListener('click', function (event) {
+  //     event.stopPropagation();
+  //     categoriesList.classList.toggle('categories__list--full');
+  //     categoriesToggle.classList.toggle('categories__toggle--rotate');
+  //     hiddenCategories.forEach((category) => {
+  //       category.classList.toggle('categories__link--hidden');
+  //     });
+  //   });
+  //   document.addEventListener('click', hideCategories);
+  // }
 
   //#endregion EXPAND CATEGORIES
 
@@ -110,6 +110,46 @@ document.addEventListener('DOMContentLoaded', () => {
   //#endregion EDIT PROFILE
 
   //#region CATEGORIES SLIDER
+  function initSliders() {
+    document.querySelectorAll('[data-slider]').forEach((slider) => {
+      const container = slider.querySelector('.slider__container');
+      const prevBtn = slider.querySelector('[data-slider-prev]');
+      const nextBtn = slider.querySelector('[data-slider-next]');
+
+      function updateArrowsVisibility() {
+        const isStart = container.scrollLeft === 0;
+        const isEnd =
+          container.scrollLeft + container.clientWidth >=
+          container.scrollWidth - 1;
+
+        prevBtn.classList.toggle('slider__button--hidden', isStart);
+        nextBtn.classList.toggle('slider__button--hidden', isEnd);
+      }
+
+      prevBtn.addEventListener('click', () => {
+        container.scrollBy({
+          left: -container.offsetWidth,
+          behavior: 'smooth',
+        });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        container.scrollBy({ left: container.offsetWidth, behavior: 'smooth' });
+      });
+
+      container.addEventListener('scroll', updateArrowsVisibility);
+      updateArrowsVisibility();
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateArrowsVisibility, 100);
+      });
+    });
+  }
+
+  initSliders();
+
   document.querySelectorAll('.categories__header').forEach((header) => {
     const categorySection = header.closest('.categories__section');
     const categorySlug = categorySection.dataset.category;
@@ -133,47 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelectorAll('.slider').forEach((slider) => {
-    const container = slider.querySelector('.slider__container');
-    const prevBtn = slider.querySelector('.slider__button--prev');
-    const nextBtn = slider.querySelector('.slider__button--next');
-
-    function updateArrowsVisibility() {
-      const isStart = container.scrollLeft === 0;
-      const isEnd =
-        container.scrollLeft + container.clientWidth >=
-        container.scrollWidth - 1;
-
-      if (isStart) {
-        prevBtn.classList.add('slider__button--hidden');
-      } else {
-        prevBtn.classList.remove('slider__button--hidden');
-      }
-
-      if (isEnd) {
-        nextBtn.classList.add('slider__button--hidden');
-      } else {
-        nextBtn.classList.remove('slider__button--hidden');
-      }
-    }
-
-    prevBtn.addEventListener('click', () => {
-      container.scrollBy({ left: -1, behavior: 'smooth' });
-    });
-
-    nextBtn.addEventListener('click', () => {
-      container.scrollBy({ left: 1, behavior: 'smooth' });
-    });
-
-    container.addEventListener('scroll', updateArrowsVisibility);
-    updateArrowsVisibility();
-
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(updateArrowsVisibility, 100);
-    });
-  });
   //#endregion CATEGORIES SLIDER
 
   //#region CUSTOM SELECT
