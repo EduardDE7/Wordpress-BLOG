@@ -782,7 +782,7 @@ html:not(.touch-device) .topbar__social a:hover svg {
 }
 
 .post-reactions {
-  margin-top: var(--space-lg);
+  margin-block: var(--space-lg);
   padding: var(--space-md);
   display: flex;
   gap: var(--space-sm);
@@ -853,6 +853,7 @@ html:not(.touch-device) .dislike-button:hover .thumbs-down-icon,
 
 .slider__container {
   display: flex;
+  gap: var(--space-md);
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;

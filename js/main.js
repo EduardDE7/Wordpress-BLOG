@@ -146,42 +146,46 @@ document.addEventListener('DOMContentLoaded', () => {
   //#endregion CATEGORIES SLIDER
 
   //#region CUSTOM SELECT
-  document
-    .querySelector('.custom-select-wrapper')
-    .addEventListener('click', function () {
-      const customSelect = document.querySelector('.custom-select');
+  // Custom Select functionality
+  const customSelectWrapper = document.querySelector('.custom-select-wrapper');
+  const customSelect = document.querySelector('.custom-select');
+  const customOptions = document.querySelectorAll('.custom-option');
+
+  if (customSelectWrapper && customSelect && customOptions.length > 0) {
+    customSelectWrapper.addEventListener('click', function () {
       customSelect.classList.toggle('open');
     });
 
-  for (const option of document.querySelectorAll('.custom-option')) {
-    option.addEventListener('click', function () {
-      if (!option.classList.contains('selected')) {
-        const selectedOption = option.parentNode.querySelector(
-          '.custom-option.selected'
-        );
-        if (selectedOption) {
-          selectedOption.classList.remove('selected');
+    customOptions.forEach((option) => {
+      option.addEventListener('click', function () {
+        if (!this.classList.contains('selected')) {
+          const selectedOption = this.parentNode.querySelector(
+            '.custom-option.selected'
+          );
+          if (selectedOption) {
+            selectedOption.classList.remove('selected');
+          }
+          this.classList.add('selected');
+
+          const triggerSpan = this.closest('.custom-select').querySelector(
+            '.custom-select__trigger span'
+          );
+          if (triggerSpan) {
+            triggerSpan.textContent = this.textContent;
+          }
+
+          const currentUrl = new URL(window.location.href);
+          currentUrl.searchParams.set('sort', this.getAttribute('data-value'));
+          window.location.href = currentUrl.toString();
         }
-        option.classList.add('selected');
+      });
+    });
 
-        const triggerSpan = option
-          .closest('.custom-select')
-          .querySelector('.custom-select__trigger span');
-        triggerSpan.textContent = option.textContent;
-
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('sort', option.getAttribute('data-value'));
-        window.location.href = currentUrl.toString();
+    window.addEventListener('click', function (e) {
+      if (customSelect && !customSelect.contains(e.target)) {
+        customSelect.classList.remove('open');
       }
     });
   }
-
-  window.addEventListener('click', function (e) {
-    const select = document.querySelector('.custom-select');
-    if (!select.contains(e.target)) {
-      select.classList.remove('open');
-    }
-  });
-
-  // #endregion CUSTOM SELECT
+  //#endregion CUSTOM SELECT
 });

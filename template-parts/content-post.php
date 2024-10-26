@@ -1,4 +1,6 @@
-<article class="post <?php echo is_single() ? 'post--full' : ''; ?>">
+<?php $is_full = $args['is_full'] ?? false; ?>
+
+<article class="post <?php echo $is_full ? 'post--full' : ''; ?>">
   <div class="post__image-wrapper">
     <?php
     if (has_post_thumbnail()) {
@@ -37,7 +39,7 @@
       <time class="post-info__date" datetime="<?php echo get_the_date('Y-m-d'); ?>"><?php the_time('j F'); ?></time>
     </div>
   </div>
-  <?php if (is_single()) : ?>
+  <?php if ($is_full) : ?>
     <div class="post__content box">
       <?php
       the_tags('<div class="post__tags">', ', ', '</div>');

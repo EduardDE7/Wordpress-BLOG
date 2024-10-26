@@ -9,11 +9,16 @@
 // }
 // add_action('init', 'custom_login');
 
+
+
+
 function login_link_url($url)
+
 {
   $url = get_bloginfo('url') . "/login";
   return $url;
 }
+
 add_filter('login_url', 'login_link_url', 10, 2);
 
 function handle_user_login()
