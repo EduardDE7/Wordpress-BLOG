@@ -2,19 +2,18 @@
 function register_reaction_assets()
 {
   if (is_single()) {
-    $style_path = get_template_directory() . '/css/post-reactions.css';
-    $script_path = get_template_directory() . '/js/post-reactions.js';
+    $version = time();
     wp_enqueue_style(
       'post-reactions-style',
-      get_template_directory_uri() . '/css/post-reactions.css',
+      get_template_directory_uri() . '/assets/css/post-reactions.css',
       array(),
-      file_exists($style_path) ? filemtime($style_path) : '1.0.0'
+      $version
     );
     wp_enqueue_script(
       'post-reactions',
-      get_template_directory_uri() . '/js/post-reactions.js',
+      get_template_directory_uri() . '/assets/js/post-reactions.js',
       array(),
-      file_exists($script_path) ? filemtime($script_path) : '1.0.0',
+      $version,
       true
     );
     wp_localize_script('post-reactions', 'reactionsAjax', array(

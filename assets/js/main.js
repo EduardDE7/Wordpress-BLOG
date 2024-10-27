@@ -6,21 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
   //#region TOGGLE THEME
   const themeToggle = document.querySelector('.topbar__theme-toggle');
 
-  function changeTheme() {
+  const changeTheme = () => {
     const body = document.body;
     body.classList.toggle('dark-theme');
+    localStorage.setItem(
+      'theme',
+      body.classList.contains('dark-theme') ? 'dark' : 'light'
+    );
+  };
 
-    if (body.classList.contains('dark-theme')) {
-      localStorage.setItem('theme', 'dark');
-    } else {
-      localStorage.setItem('theme', 'light');
+  const applySavedTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
     }
-  }
-
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-theme');
-  }
+  };
 
   if (themeToggle) {
     themeToggle.addEventListener('click', changeTheme);
@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Theme toggle button not found');
   }
 
+  applySavedTheme();
   //#endregion TOGGLE THEME
 
   //#region EDIT PROFILE
@@ -42,35 +43,36 @@ document.addEventListener('DOMContentLoaded', () => {
       '.profile__submit-button'
     );
 
-    let isEditing = false;
-    function toggleEditMode() {
-      isEditing = !isEditing;
-
+    const toggleEditMode = () => {
+      const isEditing = !profileInput[0].disabled; // Проверяем состояние редактирования
       profileInput.forEach((input) => {
-        input.disabled = !isEditing;
+        input.disabled = isEditing;
       });
 
-      if (isEditing) {
-        profileAvatarUpload.classList.remove('profile__avatar-upload--hidden');
-        profileSubmitButton.classList.remove('profile__submit-button--hidden');
-        profileEditButton.classList.add('profile__edit-button--red');
-        profileEditButton.textContent = 'Cancel';
-      } else {
-        profileAvatarUpload.classList.add('profile__avatar-upload--hidden');
-        profileSubmitButton.classList.add('profile__submit-button--hidden');
-        profileEditButton.classList.remove('profile__edit-button--red');
-      }
-    }
+      profileAvatarUpload.classList.toggle(
+        'profile__avatar-upload--hidden',
+        !isEditing
+      );
+      profileSubmitButton.classList.toggle(
+        'profile__submit-button--hidden',
+        !isEditing
+      );
+      profileEditButton.classList.toggle(
+        'profile__edit-button--red',
+        isEditing
+      );
+      profileEditButton.textContent = isEditing ? 'Cancel' : 'Edit';
+    };
 
     profileEditButton.addEventListener('click', toggleEditMode);
 
     const avatarInput = document.getElementById('avatar-upload');
     const avatarPreview = document.querySelector('.profile__avatar img');
 
-    avatarInput.addEventListener('change', function (e) {
+    avatarInput.addEventListener('change', (e) => {
       if (this.files && this.files[0]) {
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = (e) => {
           avatarPreview.src = e.target.result;
         };
         reader.readAsDataURL(this.files[0]);
