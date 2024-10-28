@@ -907,14 +907,22 @@ html.touch-device .slider__button {
 
 /*#region CATEGORIES-PAGE */
 .categories__section {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 60px 0fr;
   margin-bottom: var(--space-lg);
+  transition: grid-template-rows var(--transition-time) ease;
 }
 
-.categories__section--collapsed .slider {
-  display: none;
+.categories__section--opened {
+  grid-template-rows: 60px 1fr;
 }
 
-.categories__section--collapsed .categories__arrow-icon {
+.categories__section .slider {
+  overflow: hidden;
+}
+
+.categories__section--opened .categories__arrow-icon {
   transform: rotate(180deg);
 }
 

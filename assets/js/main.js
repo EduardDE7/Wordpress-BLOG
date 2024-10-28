@@ -126,22 +126,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const categorySection = header.closest('.categories__section');
     const categorySlug = categorySection.dataset.category;
 
-    const isCollapsed =
-      localStorage.getItem(`category_${categorySlug}_collapsed`) === 'true';
-    if (isCollapsed) {
-      categorySection.classList.add('categories__section--collapsed');
+    const isOpened = localStorage.getItem(`category_${categorySlug}_opened`);
+
+    if (isOpened === null) {
+      categorySection.classList.add('categories__section--opened');
+      localStorage.setItem(`category_${categorySlug}_opened`, 'true');
+    } else if (isOpened === 'true') {
+      categorySection.classList.add('categories__section--opened');
     }
 
     header.addEventListener('click', () => {
-      categorySection.classList.toggle('categories__section--collapsed');
+      categorySection.classList.toggle('categories__section--opened');
 
-      const isNowCollapsed = categorySection.classList.contains(
-        'categories__section--collapsed'
+      const isNowOpened = categorySection.classList.contains(
+        'categories__section--opened'
       );
-      localStorage.setItem(
-        `category_${categorySlug}_collapsed`,
-        isNowCollapsed
-      );
+      localStorage.setItem(`category_${categorySlug}_opened`, isNowOpened);
     });
   });
 
