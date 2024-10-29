@@ -1,29 +1,5 @@
 <div class="topbar">
   <div class="topbar__wrapper">
-    <?php
-    if (is_single()):
-      $prev_post = get_previous_post();
-      $next_post = get_next_post();
-    ?>
-      <div class="topbar__nav">
-        <?php if (!empty($prev_post)): ?>
-          <a href="<?php echo get_permalink($prev_post->ID); ?>"
-            class="topbar__nav-item box" title="<?php echo esc_html__('Previous Post', 'wpdev'); ?>">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-        <?php endif; ?>
-
-        <?php if (!empty($next_post)): ?>
-          <a href="<?php echo get_permalink($next_post->ID); ?>" class="topbar__nav-item box" title="<?php echo esc_html__('Next Post', 'wpdev'); ?>">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12H19M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-        <?php endif; ?>
-      </div>
-    <?php endif; ?>
     <h1 class="topbar__title"><span><?php echo esc_html($args['title']); ?></span></h1>
   </div>
   <div class="topbar__wrapper">

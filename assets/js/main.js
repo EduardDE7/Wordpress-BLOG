@@ -190,4 +190,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   //#endregion CUSTOM SELECT
+
+  const sidebar = document.querySelector('.post__sidebar');
+  const trigger = document.querySelector('.post__sidebar-trigger');
+
+  trigger.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!sidebar.contains(event.target) && !trigger.contains(event.target)) {
+      sidebar.classList.remove('active');
+    }
+  });
 });
