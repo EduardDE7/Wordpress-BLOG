@@ -12,67 +12,7 @@ $current_user = wp_get_current_user();
 $messages = array();
 
 if (isset($_POST['update_profile'])) {
-  if (!wp_verify_nonce($_POST['profile_nonce'], 'update_profile_nonce')) {
-    $messages[] = array('type' => 'error', 'text' => 'Security check failed');
-  } else {
-    if (empty($_POST['user_email'])) {
-      $messages[] = array('type' => 'error', 'text' => 'Email is required');
-    } elseif (!is_email($_POST['user_email'])) {
-      $messages[] = array('type' => 'error', 'text' => 'Please enter a valid email address');
-    }
-
-    if (empty($messages)) {
-      $user_id = $current_user->ID;
-      $email = sanitize_email($_POST['user_email']);
-      $first_name = sanitize_text_field($_POST['first_name']);
-      $last_name = sanitize_text_field($_POST['last_name']);
-
-      $display_name = trim($first_name . ' ' . $last_name);
-      if (empty(trim($display_name))) {
-        $display_name = $current_user->user_login;
-      } else if (empty($last_name)) {
-        $display_name = $first_name;
-      } else if (empty($first_name)) {
-        $display_name = $last_name;
-      }
-
-      if (isset($_FILES['custom_avatar']) && $_FILES['custom_avatar']['size'] > 0) {
-        if ($_FILES['custom_avatar']['size'] > 2 * 1024 * 1024) {
-          $messages[] = array('type' => 'error', 'text' => 'Image size should not exceed 2MB');
-        } else {
-          require_once(ABSPATH . 'wp-admin/includes/image.php');
-          require_once(ABSPATH . 'wp-admin/includes/file.php');
-          require_once(ABSPATH . 'wp-admin/includes/media.php');
-
-          $attachment_id = media_handle_upload('custom_avatar', 0);
-
-          if (is_wp_error($attachment_id)) {
-            $messages[] = array('type' => 'error', 'text' => 'Error uploading avatar: ' . $attachment_id->get_error_message());
-          } else {
-            update_user_meta($user_id, 'custom_avatar', $attachment_id);
-            $messages[] = array('type' => 'success', 'text' => 'Avatar updated successfully');
-          }
-        }
-      }
-
-      if (!array_filter($messages, function ($msg) {
-        return $msg['type'] === 'error';
-      })) {
-        wp_update_user(array(
-          'ID' => $user_id,
-          'display_name' => $display_name,
-          'first_name' => $first_name,
-          'last_name' => $last_name
-        ));
-
-        if ($email !== $current_user->user_email && !email_exists($email)) {
-          wp_update_user(array('ID' => $user_id, 'user_email' => $email));
-        }
-
-        $messages[] = array('type' => 'success', 'text' => 'Profile updated successfully');
-      }
-    }
-  }
+  $messages = process_profile_update($current_user->ID);
 }
 
 get_header();
@@ -132,7 +72,9 @@ get_sidebar();
           </div>
           <div class="profile__actions">
             <div class="profile__form-buttons">
-              <button type="submit" name="update_profile" class="profile__submit-button main-button  profile__submit-button--hidden">Save Changes</button>
+              <button type="submit" name="update_profile" class="profile__submit-button main-button profile__submit-button--hidden">
+                Save Changes
+              </button>
               <button type="button" class="profile__edit-button main-button">
                 Edit Profile
               </button>

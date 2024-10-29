@@ -21,6 +21,8 @@ get_sidebar();
           <?php endif; ?>
 
         <?php endwhile; ?>
+        <?php get_template_part('template-parts/scroll-to-top'); ?>
+
       </div>
       <div class="post__sidebar">
         <button class="post__sidebar-trigger box">
@@ -80,10 +82,8 @@ get_sidebar();
         <?php the_reaction_buttons(); ?>
         <?php get_template_part('template-parts/recommended-posts'); ?>
       </div>
+      <div class="overlay"></div>
     </div>
-
-
-
   </div>
 </main>
 

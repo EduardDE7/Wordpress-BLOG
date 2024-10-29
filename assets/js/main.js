@@ -4,91 +4,163 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   //#region TOGGLE THEME
-  const themeToggle = document.querySelector('.topbar__theme-toggle');
-
-  const changeTheme = () => {
-    const body = document.body;
-    body.classList.toggle('dark-theme');
-    localStorage.setItem(
-      'theme',
-      body.classList.contains('dark-theme') ? 'dark' : 'light'
-    );
-  };
-
-  const applySavedTheme = () => {
+  const initThemeToggle = () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       document.body.classList.add('dark-theme');
     }
+
+    const themeToggle = document.querySelector('.topbar__theme-toggle');
+    if (!themeToggle) return;
+
+    const changeTheme = () => {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+      localStorage.setItem(
+        'theme',
+        body.classList.contains('dark-theme') ? 'dark' : 'light'
+      );
+    };
+
+    themeToggle.addEventListener('click', changeTheme);
   };
 
-  if (themeToggle) {
-    themeToggle.addEventListener('click', changeTheme);
-  } else {
-    console.error('Theme toggle button not found');
-  }
-
-  applySavedTheme();
+  initThemeToggle();
   //#endregion TOGGLE THEME
 
   //#region EDIT PROFILE
-  const profileEditButton = document.querySelector('.profile__edit-button');
+  const initProfileEdit = () => {
+    const profileForm = document.querySelector('.profile__form');
+    const profileEditButton = document.querySelector('.profile__edit-button');
+    if (!profileEditButton || !profileForm) return;
 
-  if (profileEditButton) {
     const profileAvatarUpload = document.querySelector(
       '.profile__avatar-upload'
     );
-    const profileInput = document.querySelectorAll('.profile__input');
+    const profileInputs = document.querySelectorAll('.profile__input');
     const profileSubmitButton = document.querySelector(
       '.profile__submit-button'
     );
+    const avatarInput = document.getElementById('avatar-upload');
+    const avatarPreview = document.querySelector('.profile__avatar img');
 
-    const toggleEditMode = () => {
-      const isEditing = !profileInput[0].disabled; // Проверяем состояние редактирования
-      profileInput.forEach((input) => {
-        input.disabled = isEditing;
+    let isEditing = false;
+
+    const toggleEditMode = (e) => {
+      e.preventDefault();
+      isEditing = !isEditing;
+
+      profileInputs.forEach((input) => {
+        input.disabled = !isEditing;
       });
 
       profileAvatarUpload.classList.toggle(
         'profile__avatar-upload--hidden',
         !isEditing
       );
-      profileSubmitButton.classList.toggle(
-        'profile__submit-button--hidden',
-        !isEditing
-      );
-      profileEditButton.classList.toggle(
-        'profile__edit-button--red',
-        isEditing
-      );
-      profileEditButton.textContent = isEditing ? 'Cancel' : 'Edit';
+
+      if (isEditing) {
+        profileEditButton.textContent = 'Cancel';
+        profileEditButton.classList.add('profile__edit-button--red');
+        profileSubmitButton.classList.remove('profile__submit-button--hidden');
+      } else {
+        profileEditButton.textContent = 'Edit Profile';
+        profileEditButton.classList.remove('profile__edit-button--red');
+        profileSubmitButton.classList.add('profile__submit-button--hidden');
+
+        profileForm.reset();
+
+        const currentAvatar = avatarPreview.getAttribute('data-original-src');
+        if (currentAvatar) {
+          avatarPreview.src = currentAvatar;
+        }
+      }
     };
 
-    profileEditButton.addEventListener('click', toggleEditMode);
+    if (avatarPreview) {
+      avatarPreview.setAttribute('data-original-src', avatarPreview.src);
+    }
 
-    const avatarInput = document.getElementById('avatar-upload');
-    const avatarPreview = document.querySelector('.profile__avatar img');
+    if (avatarInput) {
+      avatarInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 2 * 1024 * 1024) {
+            alert('Image size should not exceed 2MB');
+            avatarInput.value = '';
+            return;
+          }
 
-    avatarInput.addEventListener('change', (e) => {
-      if (this.files && this.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          avatarPreview.src = e.target.result;
-        };
-        reader.readAsDataURL(this.files[0]);
+          if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            avatarInput.value = '';
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            avatarPreview.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    profileForm.addEventListener('submit', (e) => {
+      if (!isEditing) {
+        e.preventDefault();
+        return;
       }
     });
-  }
+
+    profileEditButton.addEventListener('click', toggleEditMode);
+  };
+
+  initProfileEdit();
   //#endregion EDIT PROFILE
 
+  //#region CATEGORIES OPEN/CLOSE
+
+  const initCategoryToggle = () => {
+    document.querySelectorAll('.categories__header').forEach((header) => {
+      const categorySection = header.closest('.categories__section');
+      if (!categorySection) return;
+
+      const categorySlug = categorySection.dataset.category;
+      const isOpened = localStorage.getItem(`category_${categorySlug}_opened`);
+
+      if (isOpened === null) {
+        categorySection.classList.add('categories__section--opened');
+        localStorage.setItem(`category_${categorySlug}_opened`, 'true');
+      } else if (isOpened === 'true') {
+        categorySection.classList.add('categories__section--opened');
+      }
+
+      header.addEventListener('click', () => {
+        categorySection.classList.toggle('categories__section--opened');
+
+        const isNowOpened = categorySection.classList.contains(
+          'categories__section--opened'
+        );
+        localStorage.setItem(`category_${categorySlug}_opened`, isNowOpened);
+      });
+    });
+  };
+
+  initCategoryToggle();
+
+  //#endregion CATEGORIES OPEN/CLOSE
+
   //#region CATEGORIES SLIDER
-  function initSliders() {
+  const initSliders = () => {
     document.querySelectorAll('[data-slider]').forEach((slider) => {
       const container = slider.querySelector('.slider__container');
       const prevBtn = slider.querySelector('[data-slider-prev]');
       const nextBtn = slider.querySelector('[data-slider-next]');
 
-      function updateArrowsVisibility() {
+      if (!container || !prevBtn || !nextBtn) return;
+
+      const updateArrowsVisibility = () => {
         const isStart = container.scrollLeft === 0;
         const isEnd =
           container.scrollLeft + container.clientWidth >=
@@ -96,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         prevBtn.classList.toggle('slider__button--hidden', isStart);
         nextBtn.classList.toggle('slider__button--hidden', isEnd);
-      }
+      };
 
       prevBtn.addEventListener('click', () => {
         container.scrollBy({
@@ -118,42 +190,21 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeTimer = setTimeout(updateArrowsVisibility, 100);
       });
     });
-  }
-
+  };
   initSliders();
-
-  document.querySelectorAll('.categories__header').forEach((header) => {
-    const categorySection = header.closest('.categories__section');
-    const categorySlug = categorySection.dataset.category;
-
-    const isOpened = localStorage.getItem(`category_${categorySlug}_opened`);
-
-    if (isOpened === null) {
-      categorySection.classList.add('categories__section--opened');
-      localStorage.setItem(`category_${categorySlug}_opened`, 'true');
-    } else if (isOpened === 'true') {
-      categorySection.classList.add('categories__section--opened');
-    }
-
-    header.addEventListener('click', () => {
-      categorySection.classList.toggle('categories__section--opened');
-
-      const isNowOpened = categorySection.classList.contains(
-        'categories__section--opened'
-      );
-      localStorage.setItem(`category_${categorySlug}_opened`, isNowOpened);
-    });
-  });
-
   //#endregion CATEGORIES SLIDER
 
   //#region CUSTOM SELECT
-  // Custom Select functionality
-  const customSelectWrapper = document.querySelector('.custom-select-wrapper');
-  const customSelect = document.querySelector('.custom-select');
-  const customOptions = document.querySelectorAll('.custom-option');
+  const initCustomSelect = () => {
+    const customSelectWrapper = document.querySelector(
+      '.custom-select-wrapper'
+    );
+    const customSelect = document.querySelector('.custom-select');
+    const customOptions = document.querySelectorAll('.custom-option');
 
-  if (customSelectWrapper && customSelect && customOptions.length > 0) {
+    if (!customSelectWrapper || !customSelect || customOptions.length === 0)
+      return;
+
     customSelectWrapper.addEventListener('click', function () {
       customSelect.classList.toggle('open');
     });
@@ -188,19 +239,63 @@ document.addEventListener('DOMContentLoaded', () => {
         customSelect.classList.remove('open');
       }
     });
-  }
+  };
+  initCustomSelect();
   //#endregion CUSTOM SELECT
 
-  const sidebar = document.querySelector('.post__sidebar');
-  const trigger = document.querySelector('.post__sidebar-trigger');
+  //#region SIDEBAR TOGGLE
+  const initSidebarToggle = () => {
+    const sidebar = document.querySelector('.post__sidebar');
+    const trigger = document.querySelector('.post__sidebar-trigger');
 
-  trigger.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-  });
+    if (!sidebar || !trigger) return;
 
-  document.addEventListener('click', (event) => {
-    if (!sidebar.contains(event.target) && !trigger.contains(event.target)) {
-      sidebar.classList.remove('active');
-    }
-  });
+    trigger.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!sidebar.contains(event.target) && !trigger.contains(event.target)) {
+        sidebar.classList.remove('active');
+      }
+    });
+  };
+  initSidebarToggle();
+  //#endregion SIDEBAR TOGGLE
+
+  //#region SCROLL TO TOP
+  const initScrollToTopButton = () => {
+    const scrollToTopButton = document.getElementById('scrollToTop');
+    if (!scrollToTopButton) return;
+
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', function () {
+      const currentScroll =
+        window.scrollY || document.documentElement.scrollTop;
+
+      if (currentScroll > 400) {
+        scrollToTopButton.classList.add('visible');
+
+        if (currentScroll > lastScrollTop) {
+          scrollToTopButton.classList.remove('visible');
+        } else {
+          scrollToTopButton.classList.add('visible');
+        }
+      } else {
+        scrollToTopButton.classList.remove('visible');
+      }
+
+      lastScrollTop = currentScroll;
+    });
+
+    scrollToTopButton.addEventListener('click', function () {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    });
+  };
+  initScrollToTopButton();
+  //#endregion SCROLL TO TOP
 });
