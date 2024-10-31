@@ -16,12 +16,10 @@ if (! function_exists('wpdev_setup')) {
 
 add_action('after_setup_theme', 'wpdev_setup');
 
-
 function wpdev_scripts()
 {
   $version = time();
   wp_enqueue_style('main', get_stylesheet_uri(), array(), $version);
-
   wp_enqueue_style('wpdev-reset', get_template_directory_uri() . '/assets/css/reset.css', array(), $version);
   wp_enqueue_style('wpdev-variables', get_template_directory_uri() . '/assets/css/variables.css', array('wpdev-reset'), $version);
   wp_enqueue_style('wpdev-main-css', get_template_directory_uri() . '/assets/css/style.css', array('wpdev-variables'), $version);

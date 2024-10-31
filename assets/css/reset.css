@@ -5,22 +5,29 @@
   border: 0;
   outline: 0;
   text-decoration: none;
-  /* list-style: none; */
 }
-/*
-*::before,
-*::after {
+
+*,
+::before,
+::after {
   box-sizing: border-box;
-} */
-/* 
+}
+
 html {
+  height: 100%;
+}
+
+html,
+:has(:target) {
   scroll-behavior: smooth;
 }
 
 body {
+  line-height: 1.5;
+  min-height: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
-} */
+  min-height: 100dvh;
+}
 
 button {
   cursor: pointer;
@@ -33,7 +40,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
-/* 
+
 img,
 video,
 picture,
@@ -50,7 +57,7 @@ select {
   font: inherit;
   color: inherit;
 }
- */
+
 p,
 h1,
 h2,
@@ -60,16 +67,6 @@ h5,
 h6 {
   overflow-wrap: break-word;
 }
-
-*,
-::before,
-::after {
-  box-sizing: border-box;
-}
-
-/* :where(ul, ol):where([class]) {
-  padding-left: 0;
-} */
 
 body,
 :where(blockquote, figure):where([class]) {
@@ -90,8 +87,12 @@ body,
   border: none;
 }
 
-/* :where(ul[class]) {
+:where(ul[class]) {
   list-style: none;
+}
+
+/* :where(ul, ol):where([class]) {
+  padding-left: 15px ;
 } */
 
 :where(address[class]) {
@@ -99,42 +100,12 @@ body,
 }
 
 p {
-  --paragraphMarginBottom: 10px;
-
+  --paragraphMarginBottom: 15px;
   margin-block: 0;
 }
 
 p:where(:not([class]):not(:last-child)) {
   margin-bottom: var(--paragraphMarginBottom);
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-input,
-textarea,
-select,
-button {
-  font: inherit;
-  color: inherit;
-}
-
-html {
-  height: 100%;
-}
-
-html,
-:has(:target) {
-  scroll-behavior: smooth;
-}
-
-body {
-  line-height: 1.5;
-  min-height: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
 }
 
 /* svg *[fill] {
