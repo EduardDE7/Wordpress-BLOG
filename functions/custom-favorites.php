@@ -175,3 +175,107 @@ function the_favorite_button($post_id = null, $classes = '')
 
   echo $html;
 }
+
+function filter_favorite_posts_ajax()
+{
+  check_ajax_referer('filter_posts_nonce', 'nonce');
+
+  if (!is_user_logged_in()) {
+    wp_send_json_error('User not logged in');
+    return;
+  }
+
+  $filter_type = isset($_POST['filter_type']) ? sanitize_text_field($_POST['filter_type']) : 'category';
+  $filter_value = isset($_POST['filter_value']) ? sanitize_text_field($_POST['filter_value']) : 'all';
+  $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'date-desc';
+  $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+  $posts_per_page = get_option('posts_per_page');
+
+  $favorites = get_user_favorites();
+
+  if (empty($favorites)) {
+    wp_send_json_success([
+      'posts' => '',
+      'max_pages' => 0,
+      'found_posts' => 0
+    ]);
+    return;
+  }
+
+  $args = array(
+    'post_type' => 'post',
+    'post__in' => $favorites,
+    'posts_per_page' => $posts_per_page,
+    'paged' => $page,
+  );
+
+  if ($filter_value !== 'all' && $filter_type === 'category') {
+    $args['tax_query'] = array(
+      array(
+        'taxonomy' => 'category',
+        'field' => 'slug',
+        'terms' => $filter_value
+      )
+    );
+  }
+
+  switch ($sort) {
+    case 'date-asc':
+      $args['orderby'] = 'date';
+      $args['order'] = 'ASC';
+      break;
+
+    case 'date-desc':
+      $args['orderby'] = 'date';
+      $args['order'] = 'DESC';
+      break;
+
+    case 'popularity':
+      $args['meta_query'] = array(
+        'relation' => 'OR',
+        array(
+          'key' => '_likes_count',
+          'compare' => 'EXISTS',
+        ),
+        array(
+          'key' => '_dislikes_count',
+          'compare' => 'EXISTS',
+        ),
+        array(
+          'key' => '_likes_count',
+          'compare' => 'NOT EXISTS',
+        ),
+        array(
+          'key' => '_dislikes_count',
+          'compare' => 'NOT EXISTS',
+        ),
+      );
+      add_filter('posts_orderby', 'sort_by_popularity', 10, 2);
+      break;
+  }
+
+  $query = new WP_Query($args);
+
+  if ($sort === 'popularity') {
+    remove_filter('posts_orderby', 'sort_by_popularity');
+  }
+
+  $response = array(
+    'posts' => '',
+    'max_pages' => $query->max_num_pages,
+    'found_posts' => $query->found_posts
+  );
+
+  if ($query->have_posts()) {
+    ob_start();
+    while ($query->have_posts()) {
+      $query->the_post();
+      get_template_part('template-parts/content', 'post');
+    }
+    $response['posts'] = ob_get_clean();
+  }
+
+  wp_reset_postdata();
+  wp_send_json_success($response);
+}
+add_action('wp_ajax_filter_favorite_posts', 'filter_favorite_posts_ajax');

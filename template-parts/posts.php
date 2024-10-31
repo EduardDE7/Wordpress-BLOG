@@ -11,7 +11,11 @@ $filter_value = isset($args['filter_value']) ? $args['filter_value'] : 'all';
       get_template_part('template-parts/content', 'post');
     endwhile; ?>
   </div>
-  <button id="loadMore" class="box load-more">Load More</button>
+  <?php
+  global $wp_query;
+  if ($wp_query->max_num_pages > 1) : ?>
+    <button id="loadMore" class="box load-more">Load More</button>
+  <?php endif; ?>
   <?php get_template_part('template-parts/scroll-to-top'); ?>
 
 <?php else : ?>

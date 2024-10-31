@@ -2,7 +2,6 @@
 
 function custom_filter_scripts()
 {
-
   $version = time();
   wp_enqueue_script('filter', get_template_directory_uri() . '/assets/js/filter.js', array('jquery'), $version, true);
   wp_localize_script('filter', 'filterAjax', array(
@@ -18,6 +17,7 @@ function filter_posts_ajax()
 
   $filter_type = isset($_POST['filter_type']) ? sanitize_text_field($_POST['filter_type']) : 'category';
   $filter_value = isset($_POST['filter_value']) ? sanitize_text_field($_POST['filter_value']) : 'all';
+  $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'date-desc';
   $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
   $posts_per_page = get_option('posts_per_page');
 
@@ -38,24 +38,51 @@ function filter_posts_ajax()
           )
         );
         break;
-
-      case 'tag':
-        $args['tax_query'] = array(
-          array(
-            'taxonomy' => 'post_tag',
-            'field' => 'slug',
-            'terms' => $filter_value
-          )
-        );
-        break;
-
-      case 'author':
-        $args['author_name'] = $filter_value;
-        break;
     }
   }
 
+  switch ($sort) {
+    case 'date-asc':
+      $args['orderby'] = 'date';
+      $args['order'] = 'ASC';
+      break;
+
+    case 'date-desc':
+      $args['orderby'] = 'date';
+      $args['order'] = 'DESC';
+      break;
+
+    case 'popularity':
+      $args['meta_query'] = array(
+        'relation' => 'OR',
+        array(
+          'key' => '_likes_count',
+          'compare' => 'EXISTS',
+        ),
+        array(
+          'key' => '_dislikes_count',
+          'compare' => 'EXISTS',
+        ),
+        array(
+          'key' => '_likes_count',
+          'compare' => 'NOT EXISTS',
+        ),
+        array(
+          'key' => '_dislikes_count',
+          'compare' => 'NOT EXISTS',
+        ),
+      );
+
+      add_filter('posts_orderby', 'sort_by_popularity', 10, 2);
+      break;
+  }
+
   $query = new WP_Query($args);
+
+  if ($sort === 'popularity') {
+    remove_filter('posts_orderby', 'sort_by_popularity');
+  }
+
   $response = array(
     'posts' => '',
     'max_pages' => $query->max_num_pages,
@@ -77,6 +104,18 @@ function filter_posts_ajax()
 add_action('wp_ajax_filter_posts', 'filter_posts_ajax');
 add_action('wp_ajax_nopriv_filter_posts', 'filter_posts_ajax');
 
+function sort_by_popularity($orderby, $query)
+{
+  global $wpdb;
+  return "COALESCE((
+    SELECT meta_value FROM {$wpdb->postmeta} 
+    WHERE post_id = {$wpdb->posts}.ID AND meta_key = '_likes_count'
+  ), 0) - 
+  COALESCE((
+    SELECT meta_value FROM {$wpdb->postmeta} 
+    WHERE post_id = {$wpdb->posts}.ID AND meta_key = '_dislikes_count'
+  ), 0) DESC, " . $orderby;
+}
 
 function get_categories_filter()
 {

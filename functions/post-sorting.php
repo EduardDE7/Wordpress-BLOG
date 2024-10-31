@@ -70,9 +70,12 @@ function get_sort_selector()
           </svg>
         </div>
         <div class="custom-options box">
-          <span class="custom-option' . ($current_sort == 'date-desc' ? ' selected' : '') . '" data-value="date-desc">Newest First</span>
-          <span class="custom-option' . ($current_sort == 'date-asc' ? ' selected' : '') . '" data-value="date-asc">Oldest First</span>
-          <span class="custom-option' . ($current_sort == 'popularity' ? ' selected' : '') . '" data-value="popularity">Most Popular</span>
+          <span class="custom-option' . ($current_sort == 'date-desc' ? ' selected' : '') . '" 
+                data-value="date-desc">Newest First</span>
+          <span class="custom-option' . ($current_sort == 'date-asc' ? ' selected' : '') . '" 
+                data-value="date-asc">Oldest First</span>
+          <span class="custom-option' . ($current_sort == 'popularity' ? ' selected' : '') . '" 
+                data-value="popularity">Most Popular</span>
         </div>
       </div>
     </div>';

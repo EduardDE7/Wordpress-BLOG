@@ -26,6 +26,7 @@ get_header();
       <header class="header">
         <?php get_template_part('template-parts/topbar', null, array('title' => 'Favorites')); ?>
         <?php echo get_categories_filter(); ?>
+        <?php echo get_sort_selector(); ?>
       </header>
 
       <?php

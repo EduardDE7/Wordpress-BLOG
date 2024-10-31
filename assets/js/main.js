@@ -194,55 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initSliders();
   //#endregion CATEGORIES SLIDER
 
-  //#region CUSTOM SELECT
-  const initCustomSelect = () => {
-    const customSelectWrapper = document.querySelector(
-      '.custom-select-wrapper'
-    );
-    const customSelect = document.querySelector('.custom-select');
-    const customOptions = document.querySelectorAll('.custom-option');
-
-    if (!customSelectWrapper || !customSelect || customOptions.length === 0)
-      return;
-
-    customSelectWrapper.addEventListener('click', function () {
-      customSelect.classList.toggle('open');
-    });
-
-    customOptions.forEach((option) => {
-      option.addEventListener('click', function () {
-        if (!this.classList.contains('selected')) {
-          const selectedOption = this.parentNode.querySelector(
-            '.custom-option.selected'
-          );
-          if (selectedOption) {
-            selectedOption.classList.remove('selected');
-          }
-          this.classList.add('selected');
-
-          const triggerSpan = this.closest('.custom-select').querySelector(
-            '.custom-select__trigger span'
-          );
-          if (triggerSpan) {
-            triggerSpan.textContent = this.textContent;
-          }
-
-          const currentUrl = new URL(window.location.href);
-          currentUrl.searchParams.set('sort', this.getAttribute('data-value'));
-          window.location.href = currentUrl.toString();
-        }
-      });
-    });
-
-    window.addEventListener('click', function (e) {
-      if (customSelect && !customSelect.contains(e.target)) {
-        customSelect.classList.remove('open');
-      }
-    });
-  };
-  initCustomSelect();
-  //#endregion CUSTOM SELECT
-
   //#region SIDEBAR TOGGLE
   const initSidebarToggle = () => {
     const sidebar = document.querySelector('.post__sidebar');
