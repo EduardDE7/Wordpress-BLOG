@@ -1,14 +1,23 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const favoriteButtons = document.querySelectorAll('.favorite-button');
+document.addEventListener('DOMContentLoaded', () => {
+  const initializeFavoriteButtons = () => {
+    const favoriteButtons = document.querySelectorAll('.favorite-button');
 
-  favoriteButtons.forEach((button) => {
-    button.addEventListener('click', handleFavoriteClick);
-  });
+    if (!favoriteButtons.length) return;
 
-  async function handleFavoriteClick(e) {
+    favoriteButtons.forEach((button) => {
+      if (!button.hasAttribute('data-initialized')) {
+        button.setAttribute('data-initialized', 'true');
+        button.addEventListener('click', handleFavoriteClick);
+      }
+    });
+  };
+
+  const handleFavoriteClick = async (e) => {
     e.preventDefault();
     const button = e.currentTarget;
     const postId = button.dataset.postId;
+
+    if (!postId) return;
 
     try {
       button.disabled = true;
@@ -29,51 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (data.success) {
         button.classList.toggle('active');
-
-        // showNotification(data.data.message);
       } else {
         throw new Error(data.data || 'Unknown error');
       }
     } catch (error) {
       console.error('Error occurred:', error);
-      // showNotification(
-      //   'Error: ' +
-      //     (error.message || 'An error occurred. Please try again later.'),
-      //   'error'
-      // );
     } finally {
       button.disabled = false;
     }
-  }
-
-  // function showNotification(message, type = 'success') {
-  //   const notification = document.createElement('div');
-  //   notification.className = `favorite-notification ${type}`;
-  //   notification.textContent = message;
-
-  //   notification.style.position = 'fixed';
-  //   notification.style.top = '20px';
-  //   notification.style.right = '20px';
-  //   notification.style.padding = '15px 25px';
-  //   notification.style.backgroundColor =
-  //     type === 'success' ? '#4CAF50' : '#f44336';
-  //   notification.style.color = 'white';
-  //   notification.style.borderRadius = '18px';
-  //   notification.style.zIndex = '1000';
-  //   notification.style.opacity = '0';
-  //   notification.style.transition = 'opacity 0.3s ease-in-out';
-
-  //   document.body.appendChild(notification);
-
-  //   setTimeout(() => {
-  //     notification.style.opacity = '1';
-  //   }, 10);
-
-  //   setTimeout(() => {
-  //     notification.style.opacity = '0';
-  //     setTimeout(() => {
-  //       document.body.removeChild(notification);
-  //     }, 300);
-  //   }, 3000);
-  // }
+  };
+  initializeFavoriteButtons();
+  window.initializeFavoriteButtons = initializeFavoriteButtons;
 });

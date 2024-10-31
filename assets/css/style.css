@@ -463,6 +463,16 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   flex-direction: column;
 }
 
+.container-grid .main__message {
+  margin-inline: auto;
+  grid-column: span 12;
+  max-width: 400px;
+  /* height: 100%; */
+  margin-inline: auto;
+  margin-top: var(--space-2xl);
+  text-align: center;
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -470,13 +480,6 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   /* padding: 10px; */
   grid-column: span 12;
   margin-bottom: var(--space-lg);
-}
-
-.container-grid .box {
-  grid-column: span 12;
-  max-width: 400px;
-  height: 100%;
-  margin-inline: auto;
 }
 
 .container-grid .header {
@@ -493,6 +496,13 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   display: grid;
   gap: var(--space-md);
   grid-template-columns: subgrid;
+}
+
+.container-grid .load-more {
+  grid-column: span 12;
+  max-width: 300px;
+  margin-inline: auto;
+  margin-block: var(--space-lg);
 }
 
 /*#endregion MAIN */
@@ -597,6 +607,7 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   gap: var(--space-sm);
   font-size: var(--fs-md);
   /* font-weight: 500; */
+  white-space: nowrap; /* Added this line */
   color: var(--secondary-text-clr, #c3c4c6);
   justify-content: space-between;
 }
@@ -605,11 +616,11 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  /* justify-content: start; */
 }
 
 .post-info__author-image-wrapper {
   border-radius: var(--radius-full);
+  flex-shrink: 0;
   overflow: hidden;
 }
 
@@ -618,6 +629,13 @@ html:not(.touch-device) .topbar__theme-toggle:hover {
   object-fit: contain;
   object-position: center;
   width: 36px;
+}
+
+.post-info__author-name {
+  max-width: 17ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .post__content {
@@ -1435,6 +1453,15 @@ html:not(.touch-device) .authorize__form-links a:hover {
   margin-bottom: var(--space-md);
 }
 
+.wp-block-code {
+  font-family: 'Fira Code', monospace;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  padding: var(--space-md);
+  color: var(--main-text-clr);
+  border-left: 4px solid var(--primary-accent-clr);
+}
+
 /*#endregion WP */
 
 /*#region CUSTOM SELECT */
@@ -1759,7 +1786,7 @@ html:not(.touch-device) .authorize__form-links a:hover {
   }
 }
 
-@media (width <= 600px) {
+@media (width <= 650px) {
   .topbar {
     flex-wrap: wrap;
   }

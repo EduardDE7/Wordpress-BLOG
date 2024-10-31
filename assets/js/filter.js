@@ -56,7 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
       loadMoreButton.disabled = true;
 
       const formData = new FormData();
-      formData.append('action', 'filter_posts');
+      formData.append(
+        'action',
+        filterType === 'favorites' ? 'filter_favorite_posts' : 'filter_posts'
+      );
       formData.append('nonce', filterAjax.nonce);
       formData.append('filter_type', currentFilter.type);
       formData.append('filter_value', currentFilter.value);
@@ -80,6 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             loadMoreButton.style.display =
               currentPage >= response.data.max_pages ? 'none' : 'block';
+
+            if (typeof window.initializeFavoriteButtons === 'function') {
+              window.initializeFavoriteButtons();
+            }
           }
         })
         .catch((error) => console.error('Error:', error))

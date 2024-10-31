@@ -12,8 +12,10 @@ $filter_value = isset($args['filter_value']) ? $args['filter_value'] : 'all';
     endwhile; ?>
   </div>
   <button id="loadMore" class="box load-more">Load More</button>
+  <?php get_template_part('template-parts/scroll-to-top'); ?>
+
 <?php else : ?>
-  <div class="box">
-    <p class="main__message">Sorry, no posts matched your criteria.</p>
+  <div class="main__message box">
+    <p>Sorry, no posts matched your criteria.</p>
   </div>
 <?php endif; ?>

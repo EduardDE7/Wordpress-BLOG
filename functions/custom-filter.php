@@ -80,12 +80,31 @@ add_action('wp_ajax_nopriv_filter_posts', 'filter_posts_ajax');
 
 function get_categories_filter()
 {
-  $categories = get_categories(array(
+  $args = array(
     'orderby' => 'name',
     'order' => 'ASC',
     'hide_empty' => true
-  ));
+  );
 
+  if (is_page_template('templates/page-favorites.php')) {
+    $favorites = get_user_favorites();
+    if (!empty($favorites)) {
+      $favorite_categories = array();
+      foreach ($favorites as $post_id) {
+        $post_categories = wp_get_post_categories($post_id);
+        $favorite_categories = array_merge($favorite_categories, $post_categories);
+      }
+      $favorite_categories = array_unique($favorite_categories);
+
+      if (!empty($favorite_categories)) {
+        $args['include'] = $favorite_categories;
+      }
+    } else {
+      return;
+    }
+  }
+
+  $categories = get_categories($args);
   if (empty($categories)) return;
 ?>
   <div class="categories-filter">

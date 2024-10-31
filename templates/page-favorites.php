@@ -25,21 +25,26 @@ get_header();
     <div class="container-grid">
       <header class="header">
         <?php get_template_part('template-parts/topbar', null, array('title' => 'Favorites')); ?>
-        <?php get_template_part('template-parts/categories', 'list'); ?>
+        <?php echo get_categories_filter(); ?>
       </header>
 
       <?php
       $favorites = get_user_favorites();
 
       if (!empty($favorites)) :
-        foreach ($favorites as $post) :
-          setup_postdata($post);
-          get_template_part('template-parts/content', 'post');
-        endforeach;
-        wp_reset_postdata();
-      else :
       ?>
-        <div class="box favorites__empty">
+        <div class="posts-container" data-filter-type="favorites" data-filter-value="all">
+          <?php
+          foreach ($favorites as $post) :
+            setup_postdata($post);
+            get_template_part('template-parts/content', 'post');
+          endforeach;
+          wp_reset_postdata();
+          ?>
+        </div>
+        <button id="loadMore" class="box load-more">Load More</button>
+      <?php else : ?>
+        <div class="box main__message">
           <p>You have no favorite posts yet.</p>
           <a href="<?php echo esc_url(home_url('/')); ?>" class="main-link">Go to the list of posts</a>
         </div>
