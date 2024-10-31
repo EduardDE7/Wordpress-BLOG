@@ -146,8 +146,8 @@ function get_categories_filter()
   $categories = get_categories($args);
   if (empty($categories)) return;
 ?>
-  <div class="categories-filter">
-    <ul class="categories-filter__list">
+  <div class="categories-filter slider" data-slider>
+    <ul class="categories-filter__list slider__container">
       <li class="categories-filter__item">
         <a href="#"
           class="categories-filter__link active"
@@ -167,6 +167,16 @@ function get_categories_filter()
         </li>
       <?php endforeach; ?>
     </ul>
+    <button class="slider__button slider__button--prev" data-slider-prev aria-label="Previous slides">
+      <svg class="slider__button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button class="slider__button slider__button--next" data-slider-next aria-label="Next slides">
+      <svg class="slider__button-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
   </div>
 <?php
 }
